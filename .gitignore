@@ -65,3 +65,5 @@ pnpm-debug.log*
 # Development server
 .cache/
 dist/
+
+index.html
