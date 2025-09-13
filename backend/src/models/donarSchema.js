@@ -10,23 +10,6 @@ const DonorSchema = new mongoose.Schema({
   password: { type: String, required: true }, // Added password field
   bloodGroup: { type: String, required: true },
 
-  // ✅ Who registered this donor
-  registeredBy: { 
-    type: String, 
-    enum: ["Self", "Hospital"], 
-    required: true,
-    default: "Self"
-  },
-
-  // ✅ Hospital ID (only if registeredBy = "Hospital")
-  registeredHospitalId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "Hospital",
-    required: function () {
-      return this.registeredBy === "Hospital";
-    }
-  },
-
   location: {
     type: {
       type: String,

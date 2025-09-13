@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true // Important for cookie handling
 });
 
 // Add auth token to requests if available
