@@ -34,4 +34,9 @@ HospitalSchema.pre("save", async function (next) {
   }
 });
 
+// Password validation method
+HospitalSchema.methods.comparePassword = async function (candidatePassword) {
+  return await require('bcryptjs').compare(candidatePassword, this.password);
+};
+
 module.exports = mongoose.model("Hospital", HospitalSchema);

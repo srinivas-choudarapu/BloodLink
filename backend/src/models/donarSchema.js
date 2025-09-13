@@ -60,4 +60,9 @@ DonorSchema.pre("save", async function (next) {
   }
 });
 
+// Password validation method
+DonorSchema.methods.comparePassword = async function (candidatePassword) {
+  return await require('bcryptjs').compare(candidatePassword, this.password);
+};
+
 module.exports=new mongoose.model("Donar",DonorSchema);
