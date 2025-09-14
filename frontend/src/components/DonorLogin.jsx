@@ -66,9 +66,9 @@ const DonorLogin = ({ onNavigate }) => {
         password: ''
       });
 
-      // Redirect to donor dashboard after successful login
+      // Redirect to donor homepage after successful login
       setTimeout(() => {
-        window.location.href = '/donor-dashboard';
+        onNavigate('donor-homepage');
       }, 1500);
 
     } catch (err) {

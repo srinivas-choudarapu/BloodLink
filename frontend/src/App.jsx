@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import LoginPage from './components/LoginPage'
 import DonorRegister from './components/DonorRegister'
 import HospitalRegister from './components/HospitalRegister'
+import DonorHomepage from './components/DonorHomepage'
+import Footer from './components/Footer'
 import './App.css'
 
 function App() {
@@ -15,14 +17,19 @@ function App() {
         return <DonorRegister onNavigate={setCurrentPage} />;
       case 'hospital-register':
         return <HospitalRegister onNavigate={setCurrentPage} />;
+      case 'donor-homepage':
+        return <DonorHomepage onNavigate={setCurrentPage} />;
       default:
         return <LoginPage onNavigate={setCurrentPage} />;
     }
   };
 
   return (
-    <div className="App">
-      {renderPage()}
+    <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={{ flex: 1 }}>
+        {renderPage()}
+      </div>
+      <Footer />
     </div>
   )
 }
