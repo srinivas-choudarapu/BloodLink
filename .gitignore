@@ -66,4 +66,3 @@ pnpm-debug.log*
 .cache/
 dist/
 
-index.html
