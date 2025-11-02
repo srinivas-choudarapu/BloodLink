@@ -54,7 +54,7 @@ const DonorLogin = ({ onNavigate }) => {
       // API call for donor login
       const response = await api.post('/auth/login/donor', requestData);
 
-      // Store user data (token is handled by cookies from backend)
+      // Store user data (cookies are already set by backend)
       localStorage.setItem('userType', 'donor');
       localStorage.setItem('userData', JSON.stringify(response.data.donor));
       

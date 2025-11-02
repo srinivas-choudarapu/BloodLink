@@ -148,6 +148,11 @@ const HospitalRegister = ({ onNavigate }) => {
       });
       setLocationPermission(false);
 
+      // Redirect to login after successful registration
+      setTimeout(() => {
+        onNavigate('login');
+      }, 2000);
+
     } catch (err) {
       // Handle different error types
       if (err.response) {

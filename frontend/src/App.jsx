@@ -3,6 +3,7 @@ import LoginPage from './components/LoginPage'
 import DonorRegister from './components/DonorRegister'
 import HospitalRegister from './components/HospitalRegister'
 import DonorHomepage from './components/DonorHomepage'
+import HospitalDashboard from './components/HospitalDashboard'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -19,6 +20,8 @@ function App() {
         return <HospitalRegister onNavigate={setCurrentPage} />;
       case 'donor-homepage':
         return <DonorHomepage onNavigate={setCurrentPage} />;
+      case 'hospital-dashboard':
+        return <HospitalDashboard onNavigate={setCurrentPage} />;
       default:
         return <LoginPage onNavigate={setCurrentPage} />;
     }

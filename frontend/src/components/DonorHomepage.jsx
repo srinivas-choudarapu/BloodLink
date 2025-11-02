@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Header from './Header';
+import { getCookie } from '../services/api';
 
 const DonorHomepage = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState('home');
@@ -13,15 +15,23 @@ const DonorHomepage = ({ onNavigate }) => {
   });
 
   useEffect(() => {
-    // Check if user is authenticated
-    const userType = localStorage.getItem('userType');
+    // Check if user is authenticated (from localStorage or cookies)
+    let userType = localStorage.getItem('userType');
+    if (!userType) {
+      userType = getCookie('userType');
+    }
+    
     if (userType !== 'donor') {
       onNavigate('login');
       return;
     }
 
-    // Get donor data from localStorage
-    const storedUserData = localStorage.getItem('userData');
+    // Get donor data from localStorage or cookies
+    let storedUserData = localStorage.getItem('userData');
+    if (!storedUserData) {
+      storedUserData = getCookie('userData');
+    }
+    
     if (storedUserData) {
       const parsedData = JSON.parse(storedUserData);
       setDonorData(prevData => ({
@@ -454,151 +464,12 @@ const DonorHomepage = ({ onNavigate }) => {
   return (
     <div style={{ background: 'linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", minHeight: '100%' }}>
       {/* Header */}
-      <header style={{ background: 'white', boxShadow: '0 20px 40px rgba(220, 38, 38, 0.15)', borderBottom: '3px solid #dc2626' }}>
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <h1 style={{ fontSize: '2.5rem', fontWeight: '700', color: '#dc2626' }}>BloodLink</h1>
-            </div>
-
-            {/* Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.5rem',
-                  border: 'none',
-                  borderRadius: '8px',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#e9ecef';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'transparent';
-                }}
-              >
-                <img
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: '2px solid #dc2626'
-                  }}
-                  src={donorData.profilePicture}
-                  alt="Profile"
-                />
-                <span className="hidden md:block" style={{ color: '#333', fontWeight: '500' }}>{donorData.name}</span>
-                <svg style={{ width: '16px', height: '16px', color: '#6c757d' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div style={{
-                  position: 'absolute',
-                  right: '0',
-                  top: '100%',
-                  marginTop: '0.5rem',
-                  width: '200px',
-                  background: 'white',
-                  borderRadius: '8px',
-                  boxShadow: '0 20px 40px rgba(220, 38, 38, 0.15)',
-                  border: '1px solid #fecaca',
-                  zIndex: 50,
-                  padding: '0.5rem 0'
-                }}>
-                  <button
-                    onClick={() => {
-                      setActiveTab('profile');
-                      setIsDropdownOpen(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      border: 'none',
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      color: '#333',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = '#e9ecef';
-                      e.target.style.color = '#dc2626';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'transparent';
-                      e.target.style.color = '#333';
-                    }}
-                  >
-                    Profile
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActiveTab('settings');
-                      setIsDropdownOpen(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      border: 'none',
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      color: '#333',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = '#e9ecef';
-                      e.target.style.color = '#dc2626';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'transparent';
-                      e.target.style.color = '#333';
-                    }}
-                  >
-                    Settings
-                  </button>
-                  <hr style={{ margin: '0.5rem 0', border: 'none', borderTop: '1px solid #e1e5e9' }} />
-                  <button
-                    onClick={handleLogout}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      border: 'none',
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      color: '#dc2626',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = '#e9ecef';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'transparent';
-                    }}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header 
+        onNavigate={onNavigate} 
+        showHomeButton={true} 
+        userType="donor" 
+        userName={donorData.name} 
+      />
 
       {/* Main Content */}
       <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>

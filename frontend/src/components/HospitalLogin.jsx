@@ -37,6 +37,12 @@ const HospitalLogin = ({ onNavigate }) => {
       const isEmail = formData.loginField.includes('@');
       const isPhone = /^\d+$/.test(formData.loginField);
       
+      if (!isEmail && !isPhone && !formData.loginField.trim()) {
+        setError('Please enter a valid email address, phone number, or license ID');
+        setIsLoading(false);
+        return;
+      }
+      
       let requestData = { password: formData.password };
       
       if (isEmail) {
@@ -50,7 +56,7 @@ const HospitalLogin = ({ onNavigate }) => {
       // API call for hospital login
       const response = await api.post('/auth/login/hospital', requestData);
 
-      // Store user data (token is handled by cookies from backend)
+      // Store user data (cookies are already set by backend)
       localStorage.setItem('userType', 'hospital');
       localStorage.setItem('userData', JSON.stringify(response.data.hospital));
       
@@ -64,7 +70,7 @@ const HospitalLogin = ({ onNavigate }) => {
 
       // Redirect to hospital dashboard after successful login
       setTimeout(() => {
-        window.location.href = '/hospital-dashboard';
+        onNavigate('hospital-dashboard');
       }, 1500);
 
     } catch (err) {
@@ -139,7 +145,7 @@ const HospitalLogin = ({ onNavigate }) => {
 
         <button
           type="submit"
-          className="login-button hospital-button"
+          className="login-button donor-button"
           disabled={isLoading}
         >
           {isLoading ? 'Signing In...' : 'Sign In as Hospital'}

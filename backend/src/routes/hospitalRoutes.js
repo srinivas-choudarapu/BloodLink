@@ -3,6 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 const Request = require('../models/requestSchema');
 const Hospital = require('../models/hospitalSchema');
+const Donor = require('../models/donarSchema');
 
 // Hospital creates a blood request (protected route)
 router.post('/request', authMiddleware, async (req, res) => {
@@ -32,6 +33,41 @@ router.post('/request', authMiddleware, async (req, res) => {
     res.status(201).json({ message: 'Blood request created', request });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Notify nearby donors endpoint
+router.post('/notify-donors', authMiddleware, async (req, res) => {
+  try {
+    const { bloodType } = req.body;
+    
+    if (!bloodType) {
+      return res.status(400).json({ error: 'Blood type is required' });
+    }
+
+    // Get hospital information
+    const hospitalId = req.user.id;
+    const hospital = await Hospital.findById(hospitalId);
+
+    if (!hospital) {
+      return res.status(404).json({ error: 'Hospital not found' });
+    }
+
+    // Find donors with matching blood type
+    // In a real application, you would also filter by location proximity
+    const donors = await Donor.find({ bloodGroup: bloodType });
+
+    // In a real application, you would send actual notifications
+    // This could be via email, SMS, push notifications, etc.
+    // For now, we'll just return the count of notified donors
+
+    return res.status(200).json({
+      message: `${donors.length} donors with ${bloodType} blood type have been notified`,
+      notifiedCount: donors.length
+    });
+  } catch (error) {
+    console.error('Error notifying donors:', error);
+    return res.status(500).json({ error: 'Failed to notify donors' });
   }
 });
 
